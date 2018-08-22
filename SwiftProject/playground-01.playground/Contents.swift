@@ -97,89 +97,33 @@ let arrayThreeString:String = array[1]
 let dictOneString:String? = dict["one"]
 let dictTwoString:String? = dict["two"]
 
-//定义为OC对象的类对象 数组和对象
-//foundation 数组和字典初始化不能确定类型 框架下的不能带确定类型
-let classArray:NSArray = ["one","two","three","four"]
-let classDict:NSDictionary = ["one":"oneKey","two":"twoKey",]
-//获取数组和字典使用下标和key来访问元素
-// as! 转化类型 as?=as! 如果对于转化确定知道类型 使用as! 不知道类型使用as? 使用as?如果转化失败会返回nil
-let classArrayOneString:String = classArray.lastObject as! String
-let classArrayTwoString:String = classArray.firstObject as! String
-let classArrayThreeString:String = classArray[1] as! String
-//类型转化 as!
-let classDictOneString:String = classDict["one"] as! String
-//类型转化 as？ 需要解包
-let classDictTwoString:String? = classDict["two"] as? String
-
-
 //可变 不带数据类型
 var mutableArray:Array<String> = ["mutableOne","mutableTwo","mutableThree",]
 //可变字典 字典的key可以是字符串也可以是整型 没有限制
 var mutableDict:Dictionary<String,String> = ["mutableOne":"mutableOneKey","mutableTwo":"mutableTwoKey",]
 var otherTypeDict = ["one":1,2:"Two","three":"3",4:5,] as [AnyHashable : Any]
 
-//as的使用 数据类型的转换
-let intergerASValue = 45 as NSInteger
-let doubleASValue = 45.0 as Double
-let floatAsValue = 45 as Float
-let intASValue = 45 as Int
+/**** as as! as?的使用*******************************************************/
 
-//is类型的判断 is操作用来判断某个对象是否属于某个特定的类 返回一个bool值类型
-let className: String = "1"
-if className is String {
-    print("string class")
-}else{
-    print("is not string class")
-}
+//as as! as? 对象类型转换(String Aarry 为明确的结构体类型 不能转换 转换自定义类型)
+//1.as的使用 数据类型的转换(无意义) 字面量无数据类型
+class Animal {}
+class Car: Animal {}
+let car: Car = Car.init()
+//从派生类向父类的转换
+let animal: Animal = car as Animal
 
-//可选类型的命名
-let optionValue: String? = "optionValue"
-let optionValue1: Optional<String> = "optionValue1"
-
-//判断可选类型是否有值
-if (optionValue != nil){
-    
-}
-
-//as as! as? 类型转换  ! ?可选类型解包
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//定义为OC对象的类对象 数组和对象 foundation 数组和字典初始化不能确定类型 框架下的不能带确定类型
+let classArray:NSArray = ["one","two","three","four"]
+let classDict:NSDictionary = ["one":"oneKey","two":"twoKey",]
+// as! 转化类型 as?=as! 二者都是用于类型的转换 如果对于转化确定知道类型 使用as! 不知道类型使用as? 使用as?如果转化失败会返回nil
+//类型转化 as! 明确类型(失败 crash)
+let classArrayOneString = classArray.lastObject as! String
+let classArrayTwoString = classArray.firstObject as! String
+let classArrayThreeString = classArray[1] as! String
+let classDictOneString:String = classDict["one"] as! String
+//类型转化 as？ 不确定类型转化是否成功 失败返回nil
+let classDictTwoString = classDict["two"] as? String
 
 
 
