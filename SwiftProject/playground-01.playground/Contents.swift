@@ -103,29 +103,3 @@ var mutableArray:Array<String> = ["mutableOne","mutableTwo","mutableThree",]
 var mutableDict:Dictionary<String,String> = ["mutableOne":"mutableOneKey","mutableTwo":"mutableTwoKey",]
 var otherTypeDict = ["one":1,2:"Two","three":"3",4:5,] as [AnyHashable : Any]
 
-/**** as as! as?的使用*******************************************************/
-
-//as as! as? 对象类型转换(String Aarry 为明确的结构体类型 不能转换 转换自定义类型)
-//1.as的使用 数据类型的转换(无意义) 字面量无数据类型
-class Animal {}
-class Car: Animal {}
-let car: Car = Car.init()
-//从派生类向父类的转换
-let animal: Animal = car as Animal
-
-//定义为OC对象的类对象 数组和对象 foundation 数组和字典初始化不能确定类型 框架下的不能带确定类型
-let classArray:NSArray = ["one","two","three","four"]
-let classDict:NSDictionary = ["one":"oneKey","two":"twoKey",]
-// as! 转化类型 as?=as! 二者都是用于类型的转换 如果对于转化确定知道类型 使用as! 不知道类型使用as? 使用as?如果转化失败会返回nil
-//类型转化 as! 明确类型(失败 crash)
-let classArrayOneString = classArray.lastObject as! String
-let classArrayTwoString = classArray.firstObject as! String
-let classArrayThreeString = classArray[1] as! String
-let classDictOneString:String = classDict["one"] as! String
-//类型转化 as？ 不确定类型转化是否成功 失败返回nil
-let classDictTwoString = classDict["two"] as? String
-
-
-
-
-
