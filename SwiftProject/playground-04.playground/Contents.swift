@@ -4,16 +4,18 @@ import UIKit
 
 var str = "Hello, playground"
 /*、
- 1 可选类型
+ 1 可选类型  解包
  2 类型推断  is
  3 对象类型转换  as  as! as?
- 4 解包
  */
 
 /*
  1.1 可选类型:swift中的可选类型是含有两种情况的枚举 None和Some(T) 表示有值和没有值的情况
  任何的类型可以明确的声明(或者隐式的转换)可选类型 当声明一个可选类型的时候，要确保用括号给 ? 操作符一个合适的范围
  可选类型可以为nil  非可选类型不行  二者可以同为空
+ swift中的可选类型指的是可选类型的值不存在为nil
+ 如果代码中的常量和变量需要适配不存在的情况下 务必将他声明为恰当的可选类型
+ 可选类型如果不提供默认值 则该对象自动为nil
 */
 let optionValue1: String? = ""
 let optionValue2: String? = "optionValue2"
@@ -21,7 +23,7 @@ let optionValue3: Optional<String> = nil
 let optionValue4: Optional<String> = "optionValue4"
 
 
-//判断可选类型是否有值
+//判断可选类型是否有值(不推荐使用)
 if optionValue1 != nil
 {
     print("optionValue1 is not nil")
@@ -59,7 +61,7 @@ if stringValue2.isEmpty
 }
 
 /*
- 1.2 !:强制解包 当你确定自定义的可选类型一定有值的时候 可以使用操作符!来进行强制解析 拿到数据 !表示一定有值 当解析错误时候会报出运行错误
+ 1.2 !:强制解包(显示解包)使用的时候先判断是否不为nil(guard let判断) 当你确定自定义的可选类型一定有值的时候 可以使用操作符!来进行强制解析 拿到数据 !表示一定有值 当解析错误时候会报出运行错误
  */
 let optionValue5: String? = "有值"
 
@@ -74,26 +76,47 @@ if optionValue6 != nil
 {  //不加判断就会出现运行错误
     print(optionValue6!)
 }
+/*
+ 1.3 隐式解包：把隐式解包的可选类型当成自动解包的可选类型 即不是每次在使用可选类型变量或者常量时候添加!号进行解析 而是定义的时候添加！ 在希望标为可选的类型名称后面，用感叹号(!)代替问号(?) 隐式解包使用在可选类型常量或者变量定义完成瞬间之后值一定存在 可以直接使用定义量值 不需要再次解包 主要用在类的初始化 XIB拖动的属性中
+ */
+let assumeString: String! = "hello"
+print(assumeString)
+print(assumeString.hashValue)
 
 /*
- 1.3 可选绑定: 避免频繁的使用判断来判断是否赋值为nil 可选绑定来判断可选类型是否包含了值 如果包含就把值赋给一个常量或者变量 一般使用if或者while语句中
+ 1.4 ?: 可选解包 一般用于调用方法的时候使用 判断是否为nil 如果为nil什么也不做 不为nil继续执行方法
+        判断可选类型变量或者常量是否响应后面这个方法
+ */
+let optionValue10: String? = "hello"
+let hasValaue = optionValue10?.hashValue
+
+let optionValue11: String? = nil
+let hasValaue1 = optionValue11?.hashValue
+
+
+/*
+ 1.5 可选绑定: 避免频繁的使用判断来判断是否赋值而为非nil 可选绑定来判断可选类型是否包含了值 如果包含就把值赋给一个常量或者变量 一般使用if或者while语句中 动态绑定也是一种解包方式
  在可选类型中存在 guard let guard let 和 if let 刚好相反 guard let 一定会有值的存在 如果没有，直接返回
  */
 let optionValue7: String? = "1"
 
+//比较少的使用 逻辑成立都是在if语句内部
 if let temp = optionValue7
 {
    print(temp)
+    
 }else
 {
     print("temp not value")
 }
 
 let optionValue8: String? = nil
+let optionValue9: String? = "12"
 
-if let temp = optionValue8
+//可以得出结论:两个可选类型同时使用动态绑定时 必须全部存在这回成立
+if let temp = optionValue8, let temp1 = optionValue9
 {
-    print(temp)
+    print(temp,temp1)
 }else
 {
     print("temp not value")
@@ -104,13 +127,19 @@ if let temp = optionValue9{
     print(temp)
 }
  */
+// guard let  推荐使用 逻辑不存了存在else 内部  逻辑数据可以存在外部处理
+func optionValue()
+{
+    guard let value = optionValue9 else
+    {
+        print("value 不存在值")
+        return
+    }
+    print("value 存在值\(value)")
+}
 
-
-
-
-
-
-
+// 总结: ?:1 用于声明Optional变量  2 用在Optional值操作中,用来判断是否响应后面的
+//      !:1 强制对 可选量 进行解包  2.声明 隐式解包的可选类型的时候, 一般用于类中的属性
 
 
 /*
@@ -225,8 +254,5 @@ if car_2_2 != nil
     print("car_2 为nil")
 }
 
-/*
- 4.1 解包
- */
 
 
