@@ -189,12 +189,31 @@ var t1: (String) = ("string")
 var t1_1: String = "string"
 
 /*
- 8.1  Any: 可以代表任何的类型 包括func方法类型   所以的类型(type)都隐式的实现了Any protocol协议
+ 8.1  Any: Any可以代表任何的类型 基本、枚举、结构体 包括func方法类型  所有的类型(type)都隐式的实现了Any protocol协议
       AnyObject: 可以代表任何的class(对象)类型实例 所有的类都隐式的实现了 AnyObject protocol协议
-      总结: AnyObject是Any的子集 所有的class关键字定义的对象都是AnyObject 所以的非关键字class定义的类型都是Any类型
+     AnyObject是Any的子集 所有的class关键字定义的对象都是AnyObject 所有的非关键字class定义的类型都是Any类型 swift为使用Cocoa框架开发 私使用AnyObject 代替id
+     AnyClass:属于AnyObject.type的别名 typealias = AnyObject.Type 表示任意类型的元类型 任意类的类型都隐私的遵从这个协议
+     AnyHashable: Any可以表示任何类型、但是Dictionary和Set的键的类型是要求遵守Hashable协议的类型，swift3添加了AnyHashable类型 这个是所有类的父类 String，int和其他的hashable类型都可以隐式地用作AnyHashable值 AnyHashable类型的值可以使用is、as !动态检查或者使用as?动态转换运算符
+ 
+     只有当你明确的需要它的行为和功能时才使用Any和AnyObject。在你的代码里使用你期望的明确的类型总是更好的.
  */
 
+//Any 类型可以表示所有类型的值，包括可选类型。Swift 会在你用 Any 类型来表示一个可选值的时候，给你一个警告。如果你确实想使用 Any 类型来承载可选值，你可以使用 as 操作符显示转换为 Any
+let swiftInt: Int? = 1
+let swiftString: String = "miao"
+var array1: [Any] = []
+array1.append(swiftInt)  // == array1.append(swiftInt as Any)
+array1.append(swiftString)
 
+
+let swiftInt1: Int? = 1
+let swiftString1: String = "miao"
+
+//AnyObject 表示class类型示例 不代表枚举 结构体 基本数据类型
+var array: [AnyObject] = []
+//Int,String是结构体，任意类型用Any,所以类型不符合，要强转类型
+array.append(swiftInt1 as AnyObject)
+array.append(swiftString1 as AnyObject)
 
 
 
