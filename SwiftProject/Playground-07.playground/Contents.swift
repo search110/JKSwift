@@ -111,21 +111,63 @@ addString.insert(contentsOf: "word", at: addString.index(before: addString.endIn
 //移除单个字符
 addString.remove(at: addString.index(before: addString.endIndex))
 
-//根据range来移除子字符串
-let range = addString.index(addString.endIndex, offsetBy: -4)..<addString.endIndex
+//根据range范围来移除子字符串
+let range = addString.index(addString.endIndex, offsetBy: -4) ..< addString.endIndex
+addString.removeSubrange(range)
+//移除全部
+addString.removeAll()
+var subString = "subString"
+//paramter false 释放初始化的内存  true 保利初始化的内存
+subString.removeAll(keepingCapacity: true)
+subString + "1"
 
-addString .removeSubrange(range)
+/* 13 子字符串:根据swift的方法可以获取对应的子字符串 子字符串和String拥有同样的功能  但是子字符串使用在临时操作 不能长时间保持(因为子字符串会重用父类字符串的内存(共用同一片内存) 导致父类字符串不用时候不能释放 直到子类字符串不不再被使用为止) 如果需要长时间保持可以将子字符串转化为实例
+ */
 
+let greetingValue = "hello,word!"
+//获取传入字符在String中的index（可选类型）
+let index_v = greetingValue.index(of: ",")
+let indexV =  index_v ?? greetingValue.endIndex
+//子字符串
+let sub_string = greetingValue[..<indexV]
+//子字符串实例化
+String(subString)
+print(subString)
 
+//获取子字符串
+let newSub = greetingValue.prefix(5)
+let newSub1 = greetingValue.suffix(5)
+let newSub2 = greetingValue.prefix(upTo: greetingValue.endIndex)
+let newSub3 = greetingValue.suffix(from: greetingValue.startIndex)
 
+/*14 字符串的比较: 1 字符串的字符相等 2 字符串的字符前缀相等 3 字符串字符后缀相等
+ */
+//字符串/字符可以使用==或者!=来比较
+let squelString1 = "I am boy"
+let squelString2 = "I am boy"
 
+if squelString1 == squelString2 {
+    
+    print("equel")
+}else{
+    print("is different")
+}
 
+//字符串hasPrefix(_:)/hasSuffix(_:)判断字符串是否存在同样的前缀或者后缀
+let httpsString = "https://www.baidu.com"
 
+if httpsString.hasPrefix("https://"){
+    
+    print("true")
+}else{
+    print("false")
+}
 
-
-
-
-
-
+if httpsString.hasSuffix("com"){
+    
+    print("true")
+}else{
+    print("false")
+}
 
 

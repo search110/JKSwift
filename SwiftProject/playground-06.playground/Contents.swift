@@ -89,7 +89,7 @@ for name1 in array[...1] {
     print(name1)
 }
 
-//10.4 半开区间也有单侧表达的形式 附带上最终值
+//10.4 半开单侧区间 附带上最终值
 for name2 in array[..<2] {
     print(name2)
 }
