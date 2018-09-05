@@ -4,7 +4,7 @@ import UIKit
 
 var str = "Hello, playground"
 /*
- 闭包
+ 闭包 闭包可以用在属性上面用于给属性赋值  用在方法上面可以作为方法的参数(调用闭包 执行函数体代码)
  */
 //闭包是自包含的函数代码块 可以在代码中被传递和使用 与OC中的Block类似，闭包主要用于异步操作执行完成后的代码回调，网络访问结果以参数的形式传递给调用方
 
@@ -109,7 +109,6 @@ incrementBySeven()
 
 incrementByTen()
 
-//注意:如果你将闭包赋值给一个类实例的属性，并且该闭包通过访问该实例或其成员而捕获了该实例，你将在闭包和该实例间创建一个循环强引用。Swift使用捕获列表来打破这种循环强引用
 
 //5.1 闭包是引用类型:上面使用常量接受闭包的函数值 发现常量的值在每一次调用后依旧可以增加其捕获的变量值 因为闭包和函数都是引用类型
 // 无论你将函数或者闭包赋值个一个常量还是变量 其实是设置这个常量或者变量对这个函数或者闭包的引用 而并非指的是闭包或者函数内容本身 这就意味着你将闭包赋值给两个不同的常量或者变量 两个值都会指向同一个闭包
@@ -119,30 +118,37 @@ let newincrementByTen = incrementByTen
 newincrementByTen()
 
 
-//5.2 逃逸闭包:当一个闭包作为参数传到另外一个函数中去的时 但是这个闭包在函数返回之后才执行 我们称该闭包从函数中逃逸。在定义闭包作为函数的参数时候 在参数名之前标注 @escaping，用来指明这个闭包是允许“逃逸”出这个函数的
+//5.2 逃逸闭包:当一个闭包作为参数传到另外一个函数中去的时 但是这个闭包在函数返回之后才执行 我们称该闭包从函数中逃逸。在定义闭包作为函数的参数时候 在参数名之后标注@escaping关键字，用来指明这个闭包是允许“逃逸”出这个函数的
 //一种可以将闭包逃逸出函数的办法是 将闭包保存在一个外部定义的变量中
 //将闭包保存在completionHandlers数组中 数组存储的就是闭包 闭包类型是()->Void(也可以认为是一个函数类型 因为函数就是特殊的闭包) 在参数名前面添加@escaping来表示闭包可以被逃逸
 var completionHandlers: [() -> Void] = []
 func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
     completionHandlers.append(completionHandler)
 }
-
+//闭包作为函数的唯一参数
 func someFunctionWithNonescapingClosure(closure: () -> Void){
    //调用闭包 执行闭包函数体代码
     closure()
 }
 
-//将一个闭包标记为 @escaping 意味着你必须在闭包中显式地引用self
+
 class SomeClass
 {
     var x = 10
+    
+    var p: ()->Int = {
+        return 100
+    }
+    
     func doSomething()
     {
-        //闭包其实类似于OC的Block
+        //someFunctionWithEscapingClosure方法中只有一个参数 并且该参数是闭包 可以省略() 和使用尾随闭包
         someFunctionWithEscapingClosure{
+            //将一个闭包标记为 @escaping 意味着你必须在闭包中显式地引用self
             self.x = 100 //显示的使用self
         }
-        someFunctionWithNonescapingClosure{
+        //尾随闭包
+        someFunctionWithNonescapingClosure(){
             x = 200      //隐式的使用self
         }
     }
@@ -151,10 +157,12 @@ class SomeClass
 let instance = SomeClass.init()
 instance.doSomething()
 print(instance.x)
+//闭包不管是作用于参数还是作用于方法作为参数中都需调用该闭包 才会闭包函数体的代码任务
+print(instance.p())
 
 //获取数组内存储的闭包(first 会返回一个可选类型)
 let completionMethod: (() ->Void)? = completionHandlers.first
-//调用闭包方法  执行闭包函数体内方法
+//数组存储的是闭包函数 调用闭包方法===>执行闭包函数体内代码
 completionMethod?()
 print(instance.x)
 
@@ -166,8 +174,11 @@ print(instance.x)
 
 var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
 print(customersInLine.count)
-//类似声明闭包 闭包代码是移除数组第一个元素
-let customerProvider = { customersInLine.remove(at: 0) }
+//类似声明闭包 不接受任何参数
+let customerProvider = {
+    //闭包内部表达式
+    customersInLine.remove(at: 0)
+}
 print(customersInLine.count)
 //调用闭包代码 执行代码  不调用永远不会执行
 print("Now serving \(customerProvider())!")
@@ -175,7 +186,7 @@ print("Now serving \(customerProvider())!")
 print(customersInLine.count)
 
 
-//显式的闭包 有{}包裹这代码表示是显示闭包表达式
+//显式的闭包是有{}花括号包裹这代码表示是显示闭包表达式
 //一般闭包都是作为函数的参数使用
 func serve(customer customerProvider1: () -> String)
 {
@@ -184,19 +195,20 @@ func serve(customer customerProvider1: () -> String)
     print(name)
 }
 
-serve{
+serve(){
     customersInLine.remove(at: 0)
 }
 //当调用闭包函数时候 开始执行闭包内部函数代码 { customersInLine.remove(at: 0) }
 
 
-//隐式闭包:通过将参数标记为 @autoclosure 来接收一个自动闭包 当你定义函数声明隐式闭包时候 调用函数传入的闭包参数时候不在是一个闭包类型 而是一个其他类型(比如 String Int等) 你可以将该函数当作接受 String类型参数（而非闭包类型）的函数来调用 customerProvider2 参数将自动转化为一个闭包，因为该参数被标记了 @autoclosure 特性 过度使用 autoclosures 会让你的代码变得难以理解
+//通过将参数标记为 @autoclosure 来接收一个自动闭包 当你定义函数闭包为该类型的闭包时候 调用函数传入的闭包参数时候不在是一个闭包类型 而是一个其他类型(比如 String Int等) 你可以将该函数当作接受 String类型参数（而非闭包类型）的函数来调用. customerProvider2参数将自动转化为一个闭包，因为该参数被标记了 @autoclosure 特性 过度使用 autoclosures 会让你的代码变得难以理解
 
-//隐式闭包不能使用 serve{customersInLine.remove(at: 0)}这种显示闭包的形式 因为参数传入不是闭包类型而是String类型(这个类型跟你定义函数时候闭包类型相同 () -> String 因为闭包返回的类型只的就是你传入的类型)
+//自动闭包不能使用 serve{customersInLine.remove(at: 0)}这种显示闭包的形式 因为参数传入不是闭包类型而是String类型(这个类型跟你定义函数时候闭包类型相同 () -> String 因为闭包返回的类型只的就是你传入的类型)
 func serve(customer customerProvider2: @autoclosure () -> String) {
    
     print("Now serving \(customerProvider2())!")
 }
+//传入的参数不在是闭包类型 而是String参数类型
 serve(customer: customersInLine.remove(at: 0))
 
 //如果你想让一个自动闭包可以“逃逸”，则应该同时使用 @autoclosure 和 @escaping 属性
