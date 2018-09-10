@@ -124,7 +124,6 @@ extension Int {
 }
 //尾随闭包
 3.repetitions {
-    
     print("hello word!")
 }
 /*
@@ -133,7 +132,7 @@ extension Int {
  */
 
 struct IntType{
-    //在值类型中: 1 类型属性是可以在类型方法中修改的 实例属性不能在类型方法中修改
+    //在值类型中: 1 类型属性是可以在类型方法中修改的 不能在实例方法中修改
     //2 实例属性 在实例方法和类型方法中都是不能修的 如果在实例方法的前面添加mutating 将实例方法修改为可变方法  则实例方法则可以修实例属性
     var name = "Tom"
    mutating func changeName(){
