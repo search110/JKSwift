@@ -9,7 +9,7 @@ var str = "Hello, playground"
   ***** 协议 *****
  */
 // 1 协议规定了实现某一特定任务或者功能的方法、属性、以及其他需要的东西。类、结构体、枚举都可以遵循协议、并且实现协议提供的具体的某种功能、如果某个类型满足协议的要求、可以说这个类型遵循这个协议
-//  2 除了遵循协议的必要方法功能必须实现外、还可以对协议进行扩展、通过扩展可以实现一部分要求功能或者实现一些附加的功能、这样就可以扩展遵循协议的类型丰富的功能
+//  2 循协议必须实现必要方法功能外、还可以对协议进行扩展、通过扩展可以实现一部分要求功能或者实现一些附加的功能、这样就可以扩展遵循协议的类型丰富的功能
 
 /*
   1 协议的语法
@@ -25,9 +25,9 @@ struct SomeStruct:SomeProtocol,SomeSencodProtocol{
 
 }
 
-//在类类型中:拥有父类的类在遵循协议的时候、应该将父类名放在协议名之前、以逗号(,)分隔
+//在类类型中:拥有父类的类在遵循协议的时候、应该将父类名放在协议名之前、以逗号(,)分隔父类和协议
 class SomeSuperClass:SomeProtocol{
-
+    //父类
 }
 //继承父类时候、当父类已经遵循某些协议的时候、子类可以直接使用、如果子类再次遵循会报重复错误
 class SomeClass:SomeSuperClass,SomeSencodProtocol{
@@ -37,14 +37,14 @@ class SomeClass:SomeSuperClass,SomeSencodProtocol{
 /*
   2 属性要求
  */
-/* 1 协议可以要求遵循协议的类型提供特定"名称"和"类型"的实例属性和类型属性(遵循协议就必须要实现协议定义的特定属性)
+/* 1 "协议"可以要求遵循协议的类型提供特定"名称"和"类型"的实例属性和类型属性(遵循协议就必须要实现协议定义的特定属性)
    2 协议定义的属性不指定是“计算型属性”还是“存储属性”、它只指定属性的类型和名称(协议定义了类需要实现的属性名称和类型)
-   3 协议定义的属性只指定属性是“可读的”还是“可读可写的” 不指定属性的种类类型
+   3 协议定义的属性只指定属性是“可读的”还是“可读可写的” 不指定属性的"种类类型"
  
- 1 如果协议要求属性是可读可写的、那么该属性不能使“常量属性”或者“只读的计算型属性”、
+ 1 如果协议要求属性是"可读可写"的、那么该属性不能使“常量属性”或者“只读的计算型属性”、
  2 如果协议只要求属性是可读的、那么该属性不仅可以定义为只读的、如果代码需要的话、还可以是可写的
 
- 特点:协议声明的“变量属性”使用关键字var来定义(可写的必须使用var关键字、可读的属性可使用关键let来定义)、在类型的声明后面添加{set、get}来表示属性的可读可写、使用{get}来表明属性是可读的
+ 特点:协议声明的“变量属性”使用关键字var来定义(可写可写的属性必须使用var关键字、可读的属性可使用关键let来定义)、在类型的声明后面添加{set、get}来表示属性的可读可写、使用{get}来表明属性是可读的
  */
 protocol SomeProtocol1{
     //可读可写属性
@@ -53,7 +53,7 @@ protocol SomeProtocol1{
     var doesNotNeedToBeSettable: Int {get}
 }
 
-//在协议中定义“类型属性”的时候、总是使用static关键字作为前缀(可以是值类型和类类型)、当类类型遵循协议的时候还可以使用关键字class类声明类型属性
+//在协议中定义“类型属性”的时候、总是使用static关键字作为前缀(可以使用在值类型和类类型)、当类类型遵循协议的时候还可以使用关键字class关键字来声明类型属性
 protocol AnotherProtocol {
     static var someTypeProperty: Int {get set}
 }
@@ -65,11 +65,10 @@ protocol FullyNamed {
 }
 
 struct Person: FullyNamed{
-    //不仅可以写成可读 还可以可写(符合协议定义)
-    var fullName: String
-    var changeName: String
-    //只能可读 符合协议定义
-    var bigName: String{
+    
+    var fullName: String //不仅可以写成可读 还可以写成可写(符合协议定义)
+    var changeName: String //可读可写
+    var bigName: String{   //只能可读 符合协议定义
         return "bigName"
     }
 }
@@ -78,7 +77,7 @@ print(john.fullName,john.changeName,john.bigName)
 //协议定义的fullName可读的 fullName可以不仅是可读还可以是可写
 john.fullName = "nihaoagain"
 john.changeName = "woyehao"
-//john.bigName ="你好" 根据协议的要求 在类型中实现为只读 数据返回  不能修改
+//john.bigName ="你好"  //根据协议的要求 在类型中实现为只读 数据返回 不能修改
 print(john.fullName,john.changeName)
 
 
@@ -86,12 +85,12 @@ print(john.fullName,john.changeName)
  3 方法要求
  */
 /*
-  1 协议可以要求遵循协议的类型实现某些指定的实例方法或类型方法、这些方法作为协议的一部分、像普通的方法一样放在协议的定义中
+  1 协议可以要求遵循协议的类型实现某些指定的"实例方法"或"类型方法"、这些方法作为协议的一部分、像普通的方法一样放在协议的定义中
   2 协议定义的方法不需要大括号和方法体
-  3 可以在方法中定义可变参数的方法
-  4 不支持为协议中的方法的参数提供默认值
+  3 可以在协议定义的方法中定义可变参数
+  4 不支持为协议中定义的方法的参数提供默认值
  */
-//协议中定义的类方法使用static定义、当类类型遵循协议的时候可以使用calss关键字类作为前缀
+//协议中定义的类方法使用static定义、当是类类型遵循协议的时候还可以使用calss关键字类作为前缀(使用class的时候 子类是可以重写改方法的)
 protocol ProtocolName1{
     //类型方法
     static func protocolName1()
@@ -120,28 +119,25 @@ print("Here's a random number: \(generator.protocolName2())")
 print("And another one: \(generator.protocolName2())")
 
 
-
 /*
  4 Mutating 方法要求
  */
 /*
-  1 有时候在方法中改变方法所属的实例、在类型的实例方法中、将mutating关键字作为实例方法的前缀 写在func关键字前面、表示在改方法中修改它所属的实例和实例属性的任意值
-  2 在协议中定义一个实例方法、该方法会改变遵循该协议的类型中的属性、那么在定义方法的时候就需要在方法前面添加关键字mutating关键字、如果是类类型则不要添加关键字
+  1 有时候在方法中改变方法所属的实例值、在类型的实例方法中、将mutating关键字作为实例方法的前缀 写在func关键字前面、表示在该方法中修改它所属的实例和实例属性的任意值
+  2 在协议中定义一个实例方法、该方法会改变遵循该协议的类型中的属性、那么在定义方法的时候就需要在方法前面添加关键字mutating关键字、如果是"类类型则不要添加关键字"
  */
 
 protocol Togglable {
-    //将会在遵循协议的方法类型中修改类型的属性值 需要添加mutating关键字
+    //将会在遵循协议的方法类型中可以修改类型的属性值 需要添加mutating关键字
     mutating func toggle()
 }
 
 enum OnOffSwitch: Togglable {
     
     case off, on
-    
+    //在实例方法中需要修改(改变)该对象所属的实例对象 就需要将该方法修改为可变
     mutating func toggle() {
-        
         switch self {
-            
         case .off:
             self = .on
         case .on:
@@ -164,44 +160,79 @@ protocol ProtocolName3{
     init(someParamter: Int)
 }
 //5.1 构造器在类类型中的实现
-// 1 你可以在遵循协议的类中实现构造器、无论是“指定构造器”还是“便利构造器” 无论哪一种构造器你都必须为构造器实现标上required修饰符 当子类继续的时候必须实现这个构造器(符合协议的要求)
-// 2 如果类已经被标记为final(不可继承)，那么不需要在“协议构造器”的实现中使用“required”修饰符，因为“final”类不能有子类
+// 1 你可以在遵循协议的类中实现构造器、无论是“指定构造器”还是“便利构造器” 无论哪一种构造器你都必须为构造器实现标上required修饰符 跟子类继承父类的时候必须实现这个构造器一样(符合协议的要求 保证继承改类的所有子类也必须遵循改协议内定义的构造器)
+// 2 如果类已经被标记为final(不可继承)，那么不需要在实现“协议构造器”的类中使用“required”修饰符，因为“final”类不能有子类
 class Father: ProtocolName3{
     //使用required 确保所有的子类也必须提供此构造器的实现、符合协议要求
+    //如果协议中未定义构造器 类也可以添加required 指定该构造器为必须构造器、子类继承该类作为父类时候、必须实现该构造器
     required init(someParamter: Int) {
     }
 }
-//因为final修改的类 不能被继承
+//因为final修饰的类 不能被继承、没有子类  所以遵循协议定义的构造器 不必添加家required关键字
 final class Big:ProtocolName3{
     //可以不添加required关键字
     init(someParamter: Int) {
     }
 }
 
-//父类遵循了协议 子类就不能再次遵循 否则会报错
+//未遵循协议
 class teacher{
+    //自定义构造器
     init(someParamter: Int) {
+    }
+//    init(someParamter: Int,otherString: String) {
+//
+//    }
+}
+class Son:teacher,ProtocolName3{
+    //当父类和协议定义的构造器参数一样时候 因为遵循协议需要加上required、因为继承自父类需要加上override
+    required override init(someParamter: Int) {
+        //父类构造器的实现部分
+        super.init(someParamter: 1)
+    }
+ //当父类和协议的构造器方法不同的时候、遵循协议构造器方法 在内部再调用父类构造器
+//    required init(someParamter: Int) {
+//        super.init(someParamter: someParamter, otherString: "1")
+//    }
+}
+
+class son2:teacher{
+    //当继承父类时候、重写父类构造器 添加关键字overried
+     override init(someParamter: Int) {
+        super.init(someParamter: someParamter)
     }
 }
 
-class Son:teacher,ProtocolName3{
-    // 因为遵循协议，需要加上 required 因为继承自父类，需要加上 override
-    required override init(someParamter: Int) {
-        // 这里是构造器的实现部分
-        super.init(someParamter: 1)
+class bbi:ProtocolName3{
+    //当父类遵循协议定义的构造器时候 添加required关键字 子类继承父类
+    //看作子类直接重写父类构造器方法、而不是遵循协议 当父类添加required关键字时候 、子类不需要添加override关键字
+    required init(someParamter: Int) {
+    }
+}
+class b:bbi{
+    //当父类的构造器添加required关键字 子类必须实现(可以看作是子类重写父类的构造器、可以不添加overried)
+    required init(someParamter: Int) {
+        super.init(someParamter: someParamter)
     }
 }
 
 //如果子类没有遵循协议(或者协议不存在构造器) 父类指定了必要构造器 子类必须实现必要构造器 且不需要添加加overrid关键字 添加required关键字
 class mother{
+    //不是遵循协议、而是添加必要构造器
     required init(name: String) {
     }
 }
-
 class subclass:mother{
-    //子类重写父类的构造器 可以不添加override关键字
+    //子类重写父类的构造器 可以不添加override关键字(如果是必要构造器可以不添加override关键字)
     required init(name: String) {
         super.init(name: name)
+    }
+}
+
+//协议定义的构造器 在类类型中必须添加required关键字 在值类型中可以不用添加关键字
+//值类型中 协议定义的构造器可以不用类似类类型中添加required关键字
+struct structClassProtocol:ProtocolName3{
+    init(someParamter: Int) {
     }
 }
 
@@ -210,15 +241,13 @@ protocol ProtocolName4{
     //可失败构造器
     init?(failure: String)
 }
-//协议定义的构造器如果用在类类型中必须使用required 保证子类可以继承
+//协议定义的构造器 不论可失败的还是非失败的构造器如果用在类类型中必须使用required 保证子类可以继承
 class dog:ProtocolName4{
-    
     required init?(failure: String) {
     }
 }
 //协议定义的构造器如果用在值类型中 则不需要使用required关键字
 struct fialureStruct:ProtocolName4{
-    
     init?(failure: String) {
     }
 }
@@ -334,7 +363,7 @@ game.play()
 
 
 /*
-  8 通过扩展添加协议
+  8 通过扩展"添加"协议
  */
 /*
  1 在无法修改源代码中添加协议的情况下、依然可以“通过扩展使得已有的类型遵循并符合协议”
@@ -355,7 +384,7 @@ extension Dice: TextRepresentable {
 
 
 /*
-  9 通过扩展遵循协议
+  9 通过扩展"遵循"协议
  */
 /*
   当一个类型已经符合了某种协议的全部的所有要求、缺还没有声明遵循该协议、可以通过空扩展体的扩展来遵循该协议
@@ -383,7 +412,7 @@ print(textRepresentable.textualDescription)
 /*
   协议类型可以在数组或者字典这样的集合中使用
  */
-// 任何遵循了该协议类型的实例都可以作为协议类型来使用
+// 任何遵循了该协议类型的实例都可以作为协议类型集合的元素
 let things: [TextRepresentable] = [hamster,d6]
 
 //thing是TextRepresentable类型 而不是对应的Hamster、Dice类型 即使实例在幕后确实是这些类型中的一种
@@ -456,7 +485,6 @@ class someOnlyClass:someClassOnlyProtocol{
         set{
             
         }get{
-          
             return 1
         }
     }
@@ -467,7 +495,7 @@ class someOnlyClass:someClassOnlyProtocol{
   13 协议合成
  */
 /*
-  有时候需要同事遵循多个协议、你可以将多个协议采用SomeProtocol & AnotherProtocol这样的格式进行组合使用、称为协议合成、你可以罗列任意多个你想要遵循的协议，以与符号(&)分隔
+  有时候需要同时遵循多个协议、你可以将多个协议采用SomeProtocol & AnotherProtocol这样的格式进行组合使用、称为“协议合成”、你可以罗列任意多个你想要遵循的协议，以与符号(&)分隔
  */
 
 protocol Named {
@@ -476,8 +504,8 @@ protocol Named {
 protocol Aged {
     var age: Int { get }
 }
-//遵循协议Named和Aged协议
-struct PersonName: Named, Aged {
+//遵循协议Named和Aged协议(&符号来表示遵循多个协议)
+struct PersonName: Named&Aged {
     var name: String
     var age: Int
 }
@@ -501,21 +529,22 @@ class Location {
         self.longitude = longitude
     }
 }
-class City: Location, Named {
+class City: Location&Named {
     var name: String
     init(name: String, latitude: Double, longitude: Double) {
         self.name = name
         super.init(latitude: latitude, longitude: longitude)
     }
 }
-func beginConcert(in location: Location & Named) {
+func beginConcert(in location: Location&Named) {
     print("Hello, \(location.name)!")
 }
 
 let seattle = City(name: "Seattle", latitude: 47.6, longitude: -122.3)
+//beginConCert方法的参数类型为 Location&Named 任何Location的子类且遵循了Named协议的实例都可以作为参数传入
 beginConcert(in: seattle)
 
-//beginConcert(in:)方法接受一个类型为 Location & Named 的参数，这意味着"任何Location的子类，并且遵循Named协议
+//beginConcert(in:)方法接受一个类型为 Location&Named 的参数，这意味着"任何Location的子类，并且遵循Named协议
 // 任何的Location的子类和子类遵循了Named协议的实例都满足这两个条件即可
 
 
@@ -575,8 +604,8 @@ for object in objects{
 
 for object in objects {
     
-    //数字objects的元素类型依然是对应的类型Circle、Country、Animal类型、当它们被赋值给常量objectWithArea的时候被视为 HasArea类型 可以访问对应的协议定义的属性
-    
+    //数字objects的元素类型依然是对应的类型Circle、Country、Animal类型、当它们被赋值给常量objectWithArea的时候被视为HasArea类型(协议类型) 可以访问对应的协议定义的属性
+    //其实遵循协议类似于继承的功能、遵循的协议类似于父类
     if let objectWithArea = object as? HasArea {
 
         print("Area is \(objectWithArea.area)")
@@ -591,13 +620,13 @@ for object in objects {
  15 可选协议的要求
  */
 /*
- 协议可以定义为“可选协议”、遵循协议的类型可以选择是否实现这些要求.
+ 协议可以定义为“可选协议”、遵循协议的类型可以选择是否实现协议中的功能.
  可选协议的要求:
-  1 在协议中使用关键字optional关键字作为前缀来在方法、函数、属性之前、 “可选协议要求”用在你需要和 Objective-C 打交道的代码中
-  2 “协议”和“可选协议的属性、方法、函数”都必须带上@objc属性关键字
-  3 标记为@objc特性的协议只能被继承自Objective-C的类或者@objc类遵循 其他类以及结构体和枚举均不能遵循这种协议
+  1 在协议的方法、函数、属性之前使用optional关键字作为前缀
+  2 “协议的定义”和“协议的属性、方法、函数”都必须带上@objc属性关键字
+  3 标记为@objc特性的协议只能被继承自Objective-C的类或者添加@objc关键字的类遵循 其他类以及结构体和枚举均不能遵循这种协议
  
- 使用"可选要求"时（例如，可选的方法或者属性），它们的类型会自动变成可选的 需要注意的是整个函数类型是可选的，而不是函数的返回值
+ "可选要求"（例如，可选的方法或者属性)、它们的类型会"自动变成可选"的 需要注意的是整个函数类型是可选的，而不是函数的返回值
  */
 @objc protocol CounterDataSource{
     //协议为可选协议 按道理遵循协议的类型可以选择实现是否实现协议里面的方法、属性 但是最好还是实现
@@ -610,7 +639,7 @@ class Counter {
     //CounterDataSource类型的可选属性
     var dataSource: CounterDataSource?
     func increment() {
-        //使用可选链式调用
+        //使用可选链式调用(使用可选协议的属性、方法会自动变成可选类型 incrementForCount 可以使用可选链式调用)
         if let amount = dataSource?.incrementForCount?(count: count) {
             count += amount
         } else if let amount = dataSource?.fixedIncrement {
@@ -619,7 +648,7 @@ class Counter {
     }
 }
 
-//1 标记为@objc特性的协议能被继承自Objective-C的类继承
+//1 标记为“@objc的协议”能被继承自Objective-C的类遵循可选协议
 class ThreeSource: NSObject,CounterDataSource{
     
      let fixedIncrement = 4
@@ -631,8 +660,8 @@ for _ in 1...4 {
     print(counter.count)
 }
 
-//2 标记为@objc特性的协议能被@objc类遵循(该类也必须继承自OC类对象)
-@objc class FourSource: NSObject,CounterDataSource{
+//2 标记为“@objc的协议”能被标记为@objc类遵循(该类也必须继承自OC类对象)
+@objc class FourSource:NSObject,CounterDataSource{
     
     func increment(forCount count: Int) -> Int {
         if count == 0 {
@@ -643,7 +672,6 @@ for _ in 1...4 {
             return -1
         }
     }
-    
 }
 
 counter.count = -4
@@ -653,6 +681,11 @@ for _ in 1...5 {
     counter.increment()
     print(counter.count)
 }
+
+//3 标记为“@objc的协议”能被类类型遵循协议、不能被值类型遵循协议
+class classOption:CounterDataSource{
+}
+
 
 /*
  16 协议的扩展
@@ -686,17 +719,21 @@ print(curren.randomBool())
   17 提供默认实现
  */
 /*
-  可以通过协议扩展来为协议要求的属性、方法、函数以及下标提供默认的实现、如果遵循协议的类型为这些要求提供了自己的实现，那么这些自定义实现将会替代扩展中的默认实现被使用
+  可以通过协议扩展来为协议要求的属性、方法、函数以及下标提供默认的实现、如果遵循协议的类型为这些要求提供了自己的实现，那么这些在类中自定义实现将会替代扩展中的默认实现被使用
  注:“通过extension扩展来为这个协议protocol中的属性或者方法提供默认的值”
- 注意:通过协议扩展为协议里面定义的属性或者方法提供某人的值和可选协议要求不同点:
+ 注意:通过协议扩展为协议里面定义的属性或者方法提供默认的值和可选协议要求不同点:
      1 虽然两者情况下、遵循协议的类型无需自己实现协议要求的方法、属性、或者其他功能
      2 但是通过扩展提供的协议默认实现可以直接调用、不需要使用可选式调用
+ 
+ 注意:1 协议和协议扩展的区别:协议一般是用来定义属性、方法、下标的定义功能 协议的扩展:可以用来"实现"属性、下标、方法的功能 为遵循协议类型提供协议默认的实现、不至于每个遵循协议的类型都需要去实现同一个对应的功能
+     2 如果遵循协议的类型实现了协议扩展中提供的默认功能、则自定义实现的替换默认实现的功能
+     3 虽然协议扩展中提供的默认实现和可选协议定义的属性和方法都提供了默认的实现(可选协议定义的可以不用实现、是可选的)、但是可选协议定义的使用是使用可选链式调用、协议扩展定义的直接调用
  */
 
 //给协议PrettyTextRepresentable中的属性prettyTextualDescription提供默认的属性值
 extension PrettyTextRepresentable {
     var prettyTextualDescription: String {
-        return "你好"
+        return textualDescription
     }
 }
 
@@ -721,7 +758,7 @@ let mauriceTheHamster = Hamster(name: "Maurice")
 let hamsters = [murrayTheHamster, morganTheHamster, mauriceTheHamster]
 
 print(hamsters.textualDescription)
-//注意:如果多个协议扩展都为同一个协议提供了默认实现，而遵循协议的类型又同时满足这些协议扩展的限制条件，"那么将会使用"限制条件最多"的那个"协议扩展"作为提供的默认的实现"
+//注意:如果多个协议扩展都为同一个协议提供了默认实现，而遵循协议的类型又同时满足这些协议扩展的限制条件，"那么将会使用"限制条件最多"(where后面条件多的扩展协议)的那个"协议扩展"作为提供的默认的实现"
 
 
 
